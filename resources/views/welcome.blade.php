@@ -8,7 +8,7 @@
         <div>
             <!-- bootstrapでレイアウトを工夫する -->
             {{-- ユーザ登録ページへのリンク --}}
-            <button><a href="#" class="">会員登録</a></button>
+            <button>{!! link_to_route('signup.get', '会員登録', [], ['class' => 'btn btn-lg btn-primary']) !!}</button>
             {{-- ログインページへのリンク --}}
             <button><a href="#" class="">ログイン</a></botton>
         </div>
@@ -20,7 +20,7 @@
         <div>
             <!-- bootstrapでレイアウトを工夫する -->    
             {{-- ユーザ登録ページへのリンク --}}
-            <button><a href="#" class="">会員登録</a></button>
+            <button>{!! link_to_route('signup.get', '会員登録', [], ['class' => 'btn btn-lg btn-primary']) !!}</button>
             {{-- ログインページへのリンク --}}
             <button><a href="#" class="">ログイン</a></botton>
         </div>

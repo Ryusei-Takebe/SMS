@@ -15,12 +15,12 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name }}</a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            {{-- ユーザ詳細ページへのリンク --}}
-                            <li class="dropdown-item"><a href="#">My profile</a></li>
-                            {{-- ユーザ詳細ページへのリンク --}}
-                            <li class="dropdown-item"><a href="#">My profile</a></li>
-                            {{-- ユーザ詳細ページへのリンク --}}
-                            <li class="dropdown-item"><a href="#">My profile</a></li>
+                            {{-- マイページへのリンク --}}
+                            <li class="dropdown-item">{!! link_to_route('tasks.index', 'マイページ', ['user' => Auth::id()]) !!}</li>
+                            {{-- カレンダーページへのリンク --}}
+                            <li class="dropdown-item"><a href="#">カレンダー</a></li>
+                            {{-- タスク追加ページへのリンク --}}
+                            <li class="dropdown-item">{!! link_to_route('tasks.create', 'タスク追加', ['user' => Auth::id()]) !!}</li>
                             <li class="dropdown-divider"></li>
                             {{-- ログアウトへのリンク --}}
                             <li class="dropdown-item">{!! link_to_route('logout.get', 'Logout') !!}</li>

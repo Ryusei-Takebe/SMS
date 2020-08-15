@@ -1,3 +1,5 @@
+<!-- ナビゲーションバーの下にcard.bladeを組み込み表示する -->
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -12,6 +14,8 @@
         {{-- ナビゲーションバー --}}
         @include('commons.navbar')
 
+        {{-- カード --}
+        @include('layouts.card')
         <div class="container">
             {{-- エラーメッセージ --}}
             @include('commons.error_messages')

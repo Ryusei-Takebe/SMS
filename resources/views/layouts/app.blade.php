@@ -14,8 +14,10 @@
         {{-- ナビゲーションバー --}}
         @include('commons.navbar')
 
-        {{-- カード --}
+        {{-- カード --}}
         @include('layouts.card')
+
+
         <div class="container">
             {{-- エラーメッセージ --}}
             @include('commons.error_messages')

@@ -110,4 +110,22 @@ class TasksController extends Controller
     }
     
     
+    public function calendar()
+    {
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を日時の降順で取得
+            $tasks = $user->tasks()->orderBy('id', 'desc')->paginate(25);
+
+            $data = [
+                'user' => $user,
+                'tasks' => $tasks,
+            ];
+        }
+
+        // calendarビューでそれらを表示
+        return view('tasks.calendar', $data);
+    }
 }

@@ -14,8 +14,6 @@
 //つまり、indexアクションは/と/tasksにアクセスした両方で同じルーティング
 Route::get('/', 'TasksController@index');
 
-Route::resource('tasks', 'TasksController');
-
 // ユーザ登録
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
@@ -29,4 +27,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 //store,destroyはログイン済のユーザしか実行できない。
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('tasks', 'TasksController', ['only' => ['store', 'destroy', 'show', 'index']]);
+    Route::get('calendar', 'TasksController@calendar')->name('tasks.calendar');
+    Route::get('create', 'TasksController@create')->name('tasks.create');
 });
+
+
+

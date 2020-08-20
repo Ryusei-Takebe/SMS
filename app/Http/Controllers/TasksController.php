@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Task;
 
+use Carbon\Carbon;
+
 class TasksController extends Controller
 {
     //tasksを取得して表示したい
@@ -16,18 +18,18 @@ class TasksController extends Controller
             // 認証済みユーザを取得
             $user = \Auth::user();
             // ユーザの投稿の一覧を日時の降順で取得
-            $tasks = $user->tasks()->orderBy('id', 'desc')->paginate(25);
-
-            $data = [
-                'user' => $user,
-                'tasks' => $tasks,
-            ];
+            $tasksDay = $user->tasks()->whereDate('date', '=', Carbon::today())->orderBy('task_start', 'asc')->paginate(10);
+            //Carbonで週初めと週終わりを取得する
+            $tasksWeek = $user->tasks()->whereDate('date', '>=', new Carbon('2020-08-16'))->whereDate('date', '<=', new Carbon('2020-08-22'))->orderBy('date', 'asc')->paginate(10);
+            
+        } else {
+            $user = null;
+            $tasksDay = null;
+            $tasksWeek = null;
         }
 
-
-
-        // welcomeビューでそれらを表示
-        return view('welcome', $data);
+        // welocmeビューでそれらを表示
+        return view('welcome', compact('user', 'tasksDay', 'tasksWeek'));
     }
     
     /**
@@ -54,7 +56,6 @@ class TasksController extends Controller
             'title' => 'required|max:255',
             'date' => 'required',
             'task_start' => 'required',
-            'task_end' => 'required',
             'content' => 'required|max:255',
         ]);
 
@@ -68,7 +69,7 @@ class TasksController extends Controller
         ]);
 
         // 前のURLへリダイレクトさせる
-        return back();
+        return redirect('/show');
     }
     
     /**
@@ -78,21 +79,26 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
      //getでtasks/(任意のid)にアクセスされた場合の「取得表示処理」
-    public function show($id)
+    public function show(Request $request)
     {
-        // idの値でメッセージを検索して取得
-        $task = Task::findOrFail($id);
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿を日時で取得
+            $getParam = $request->query();
+            if(isset($getParam['date'])){
+                $tasks = $user->tasks()->whereDate('date', '=', $getParam['date'])->orderBy('task_start', 'asc')->paginate(10);
+            } else {
+                //Carbonで週初めと週終わりを取得する
+                $tasks = $user->tasks()->whereDate('date', '>=', new Carbon('2020-08-16'))->whereDate('date', '<=', new Carbon('2020-08-22'))->orderBy('date', 'asc')->paginate(10);
+            }
+            
+            
+        } 
 
-        // 関係するモデルの件数をロード
-        $task->loadRelationshipCounts();
-
-        // ユーザの投稿一覧を作成日時の降順で取得
-        $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
-        
-        // タスク詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        // showビューでそれらを表示
+        return view('tasks.show', compact('user', 'tasks'));
     }
     
     public function destroy($id)
@@ -119,13 +125,15 @@ class TasksController extends Controller
             // ユーザの投稿の一覧を日時の降順で取得
             $tasks = $user->tasks()->orderBy('id', 'desc')->paginate(25);
 
-            $data = [
-                'user' => $user,
-                'tasks' => $tasks,
-            ];
+            $tasksDay = $user->tasks()->whereDate('date', '=', Carbon::today())->orderBy('task_start', 'asc')->paginate(10);
+            
+            //Carbonで週初めと週終わりを取得する
+            $tasksWeek = $user->tasks()->whereDate('date', '>=', new Carbon('2020-08-16'))->whereDate('date', '<=', new Carbon('2020-08-22'))->orderBy('date', 'asc')->paginate(10);
+            
+            
         }
 
-        // calendarビューでそれらを表示
-        return view('tasks.calendar', $data);
+        // czlendarビューでそれらを表示
+        return view('tasks.calendar', compact('user', 'tasksDay', 'tasksWeek'));
     }
 }

@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('tasks', 'TasksController', ['only' => ['store', 'destroy', 'show', 'index']]);
     Route::get('calendar', 'TasksController@calendar')->name('tasks.calendar');
     Route::get('create', 'TasksController@create')->name('tasks.create');
+    Route::get('show', 'TasksController@show')->name('tasks.show');
 });
 
 
